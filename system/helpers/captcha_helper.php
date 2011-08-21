@@ -35,11 +35,13 @@
  * @param	string	path to create the image in
  * @param	string	URL to the CAPTCHA image folder
  * @param	string	server path to font
- * @return	string
+ * @param	array	array of colors
+ * 		Es: array('text_color' => '#ffffff','border_color' => '#000000')
+ * @return	array
  */
 if ( ! function_exists('create_captcha'))
 {
-	function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = '')
+	function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = '', $colors = array())
 	{
 		$defaults = array('word' => '', 'img_path' => '', 'img_url' => '', 'img_width' => '150', 'img_height' => '30', 'font_path' => '', 'expiration' => 7200);
 
@@ -236,8 +238,42 @@ if ( ! function_exists('create_captcha'))
 
 		ImageDestroy($im);
 
-		return array('word' => $word, 'time' => $now, 'image' => $img);
+		return array('word' => $word, 'time' => $now, 'image' => $img, 'image_src' => $img_url.$img_name);
 	}
+	
+}
+
+if (! function_exists('_hex2RGB'))
+{
+	function _hex2RGB($hexStr) {
+		
+		// Gets a proper hex string
+		$hexStr = preg_replace("/[^0-9A-Fa-f]/", '', $hexStr);
+		$rgbArray = array();
+		
+    	if (strlen($hexStr) == 6)
+    	{ 
+    		//If a proper hex code, convert using bitwise operation. No overhead... faster
+			$colorVal = hexdec($hexStr);
+			$rgbArray['r']	= 0xFF & ($colorVal >> 0x10);
+			$rgbArray['g']	= 0xFF & ($colorVal >> 0x8);
+			$rgbArray['b']	= 0xFF & $colorVal;
+    	} 
+    	elseif (strlen($hexStr) == 3) 
+    	{ 
+    		//if shorthand notation, need some string manipulations
+			$rgbArray['r']	= hexdec(str_repeat(substr($hexStr, 0, 1), 2));
+			$rgbArray['g']	= hexdec(str_repeat(substr($hexStr, 1, 1), 2));
+			$rgbArray['b']	= hexdec(str_repeat(substr($hexStr, 2, 1), 2));
+    	}
+    	else
+    	{
+    		//Invalid hex color code
+			return FALSE; 
+    	}
+    	
+		return $rgbArray;
+	} 
 }
 
 // ------------------------------------------------------------------------
