@@ -148,11 +148,39 @@ if ( ! function_exists('create_captcha'))
 		//  Assign colors
 		// -----------------------------------
 
-		$bg_color		= imagecolorallocate ($im, 255, 255, 255);
-		$border_color	= imagecolorallocate ($im, 153, 102, 102);
-		$text_color		= imagecolorallocate ($im, 204, 153, 153);
-		$grid_color		= imagecolorallocate($im, 255, 182, 182);
-		$shadow_color	= imagecolorallocate($im, 255, 240, 240);
+		$default_color = array(
+			'bg_color' 		=> array(255,255,255),
+			'border_color' 	=> array(153,102,102),
+			'text_color' 	=> array(204,154,153),
+			'grid_color' 	=> array(255,182,182),
+			'shadow_color' 	=> array(255,240,240)
+		);
+		
+		if (count($colors) > 0)
+		{
+			foreach ($colors as $key => $val)
+			{
+				if (isset($default_color[$key]))
+				{
+					if (is_string($val) && preg_match("/^#[0-9A-F]{3,6}$/i", $val))
+					{
+						$_hex = _hex2RGB($val);
+						if ($_hex !== FALSE)
+							$default_color[$key] = array_values($_hex);
+					}
+					elseif (is_array($val) && count($val) == 3)
+					{
+						$default_color[$key] = $val;
+					}
+				}
+			}
+		}
+		
+		$bg_color		= imagecolorallocate ($im, $default_color['bg_color'][0], $default_color['bg_color'][1], $default_color['bg_color'][2]);
+		$border_color	= imagecolorallocate ($im, $default_color['border_color'][0], $default_color['border_color'][1], $default_color['border_color'][2]);
+		$text_color		= imagecolorallocate ($im, $default_color['text_color'][0], $default_color['text_color'][1], $default_color['text_color'][2]);
+		$grid_color		= imagecolorallocate ($im, $default_color['grid_color'][0], $default_color['grid_color'][1], $default_color['grid_color'][2]);
+		$shadow_color	= imagecolorallocate ($im, $default_color['shadow_color'][0], $default_color['shadow_color'][1], $default_color['shadow_color'][2]);
 
 		// -----------------------------------
 		//  Create the rectangle
