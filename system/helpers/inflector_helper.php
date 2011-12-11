@@ -4,10 +4,22 @@
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Open Software License version 3.0
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to obtain it
+ * through the world wide web, please send an email to
+ * licensing@ellislab.com so we can send you a copy immediately.
+ *
  * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
+ * @author		EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  * @link		http://codeigniter.com
  * @since		Version 1.0
  * @filesource
@@ -21,7 +33,7 @@
  * @package		CodeIgniter
  * @subpackage	Helpers
  * @category	Helpers
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/helpers/directory_helper.html
  */
 
@@ -72,7 +84,7 @@ if ( ! function_exists('singular'))
 			'/(n)ews$/'             => '\1\2ews',
 			'/([^u])s$/'            => '\1',
 		);
-		
+
 		foreach ($singular_rules as $rule => $replacement)
 		{
 			if (preg_match($rule, $result))
@@ -103,7 +115,7 @@ if ( ! function_exists('plural'))
 	function plural($str, $force = FALSE)
 	{
 		$result = strval($str);
-	
+
 		$plural_rules = array(
 			'/^(ox)$/'                 => '\1\2en',     // ox
 			'/([m|l])ouse$/'           => '\1ice',      // mouse, louse
@@ -184,20 +196,20 @@ if ( ! function_exists('underscore'))
 /**
  * Humanize
  *
- * Takes multiple words separated by underscores and changes them to spaces
+ * Takes multiple words separated by the separator and changes them to spaces
  *
  * @access	public
- * @param	string
+ * @param	string $str
+ * @param 	string $separator
  * @return	str
  */
 if ( ! function_exists('humanize'))
 {
-	function humanize($str)
+	function humanize($str, $separator = '_')
 	{
-		return ucwords(preg_replace('/[_]+/', ' ', strtolower(trim($str))));
+		return ucwords(preg_replace('/['.$separator.']+/', ' ', strtolower(trim($str))));
 	}
 }
-
 
 /* End of file inflector_helper.php */
 /* Location: ./system/helpers/inflector_helper.php */

@@ -1,4 +1,29 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP 5.1.6 or newer
+ *
+ * NOTICE OF LICENSE
+ * 
+ * Licensed under the Academic Free License version 3.0
+ * 
+ * This source file is subject to the Academic Free License (AFL 3.0) that is
+ * bundled with this package in the files license_afl.txt / license_afl.rst.
+ * It is also available through the world wide web at this URL:
+ * http://opensource.org/licenses/AFL-3.0
+ * If you did not receive a copy of the license and are unable to obtain it
+ * through the world wide web, please send an email to
+ * licensing@ellislab.com so we can send you a copy immediately.
+ *
+ * @package		CodeIgniter
+ * @author		EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @license		http://opensource.org/licenses/AFL-3.0 Academic Free License (AFL 3.0)
+ * @link		http://codeigniter.com
+ * @since		Version 1.0
+ * @filesource
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +103,8 @@ $config['language']	= 'english';
 |
 | This determines which character set is used by default in various methods
 | that require a character set to be provided.
+|
+| See http://php.net/htmlspecialchars for a list of supported charsets.
 |
 */
 $config['charset'] = 'UTF-8';
@@ -176,6 +203,10 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 |	3 = Informational Messages
 |	4 = All Messages
 |
+| You can also pass in a array with threshold levels to show individual error types
+| 
+| 	array(2) = Debug Messages, without Error Messages
+|
 | For a live site you'll usually only enable Errors (1) to be logged otherwise
 | your log files will fill up very fast.
 |
@@ -222,6 +253,9 @@ $config['cache_path'] = '';
 |
 | If you use the Encryption class or the Session class you
 | MUST set an encryption key.  See the user guide for info.
+|  
+| http://codeigniter.com/user_guide/libraries/encryption.html
+| http://codeigniter.com/user_guide/libraries/sessions.html
 |
 */
 $config['encryption_key'] = '';
@@ -292,11 +326,13 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_token_name' = The token name
 | 'csrf_cookie_name' = The cookie name
 | 'csrf_expire' = The number in seconds the token should expire.
+| 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
 $config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
+$config['csrf_exclude_uris'] = array();
 
 /*
 |--------------------------------------------------------------------------

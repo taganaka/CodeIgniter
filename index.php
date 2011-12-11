@@ -1,4 +1,29 @@
 <?php
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP 5.1.6 or newer
+ *
+ * NOTICE OF LICENSE
+ * 
+ * Licensed under the Open Software License version 3.0
+ * 
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to obtain it
+ * through the world wide web, please send an email to
+ * licensing@ellislab.com so we can send you a copy immediately.
+ *
+ * @package		CodeIgniter
+ * @author		EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @link		http://codeigniter.com
+ * @since		Version 1.0
+ * @filesource
+ */
 
 /*
  *---------------------------------------------------------------
@@ -73,6 +98,23 @@ if (defined('ENVIRONMENT'))
  *
  */
 	$application_folder = 'application';
+		
+/*
+ *---------------------------------------------------------------
+ * VIEW FOLDER NAME
+ *---------------------------------------------------------------
+ * 
+ * If you want to move the view folder out of the application 
+ * folder set the path to the folder here. The folder can be renamed
+ * and relocated anywhere on your server. If blank, it will default 
+ * to the standard location inside your application folder.  If you 
+ * do move this, use the full server path to this folder 
+ *
+ * NO TRAILING SLASH!
+ *
+ */
+	$view_folder = '';	
+
 
 /*
  * --------------------------------------------------------------------
@@ -190,6 +232,22 @@ if (defined('ENVIRONMENT'))
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
+	
+	// The path to the "views" folder
+	if (is_dir($view_folder)) 
+	{
+		define ('VIEWPATH', $view_folder .'/');
+	}
+	else 
+	{
+		if ( ! is_dir(APPPATH.'views/'))
+		{
+			exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+		}
+				
+		define ('VIEWPATH', APPPATH.'views/' );	
+	}
+	
 
 /*
  * --------------------------------------------------------------------

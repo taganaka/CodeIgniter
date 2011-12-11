@@ -4,10 +4,22 @@
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Open Software License version 3.0
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to obtain it
+ * through the world wide web, please send an email to
+ * licensing@ellislab.com so we can send you a copy immediately.
+ *
  * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
+ * @author		EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  * @link		http://codeigniter.com
  * @since		Version 1.0
  * @filesource
@@ -21,7 +33,7 @@
  * @package		CodeIgniter
  * @subpackage	Libraries
  * @category	Image_lib
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/libraries/image_lib.html
  */
 class CI_Image_lib {
@@ -104,15 +116,37 @@ class CI_Image_lib {
 	 */
 	function clear()
 	{
-		$props = array('source_folder', 'dest_folder', 'source_image', 'full_src_path', 'full_dst_path', 'new_image', 'image_type', 'size_str', 'quality', 'orig_width', 'orig_height', 'rotation_angle', 'x_axis', 'y_axis', 'create_fnc', 'copy_fnc', 'wm_overlay_path', 'wm_use_truetype', 'dynamic_output', 'wm_font_size', 'wm_text', 'wm_vrt_alignment', 'wm_hor_alignment', 'wm_padding', 'wm_hor_offset', 'wm_vrt_offset', 'wm_font_color', 'wm_use_drop_shadow', 'wm_shadow_color', 'wm_shadow_distance', 'wm_opacity');
+		$props = array('library_path', 'source_image', 'new_image', 'width', 'height', 'rotation_angle', 'x_axis', 'y_axis', 'wm_text', 'wm_overlay_path', 'wm_font_path', 'wm_shadow_color', 'source_folder', 'dest_folder', 'mime_type', 'orig_width', 'orig_height', 'image_type', 'size_str', 'full_src_path', 'full_dst_path');
 
 		foreach ($props as $val)
 		{
 			$this->$val = '';
 		}
 
-		// special consideration for master_dim
-		$this->master_dim = 'auto';
+		$this->image_library 		= 'gd2';
+		$this->dynamic_output 		= FALSE;
+		$this->quality 				= '90';
+		$this->create_thumb 		= FALSE;
+		$this->thumb_marker 		= '_thumb';
+		$this->maintain_ratio 		= TRUE;
+		$this->master_dim 			= 'auto';
+		$this->wm_type 				= 'text';
+		$this->wm_x_transp 			= 4;
+		$this->wm_y_transp 			= 4;
+		$this->wm_font_size 		= 17;
+		$this->wm_vrt_alignment 	= 'B';
+		$this->wm_hor_alignment 	= 'C';
+		$this->wm_padding 			= 0;
+		$this->wm_hor_offset 		= 0;
+		$this->wm_vrt_offset 		= 0;
+		$this->wm_font_color		= '#ffffff';
+		$this->wm_shadow_distance 	= 2;
+		$this->wm_opacity 			= 50;
+		$this->create_fnc 			= 'imagecreatetruecolor';
+		$this->copy_fnc 			= 'imagecopyresampled';
+		$this->error_msg 			= array();
+		$this->wm_use_drop_shadow 	= FALSE;
+		$this->wm_use_truetype 		= FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -146,7 +180,7 @@ class CI_Image_lib {
 		if ($this->source_image == '')
 		{
 			$this->set_error('imglib_source_image_required');
-			return FALSE;	
+			return FALSE;
 		}
 
 		/*
@@ -189,7 +223,7 @@ class CI_Image_lib {
 		// Set the Image Properties
 		if ( ! $this->get_image_properties($this->source_folder.$this->source_image))
 		{
-			return FALSE;	
+			return FALSE;
 		}
 
 		/*
@@ -399,7 +433,7 @@ class CI_Image_lib {
 		if ($this->rotation_angle == '' OR ! in_array($this->rotation_angle, $degs))
 		{
 			$this->set_error('imglib_rotation_angle_required');
-			return FALSE;	
+			return FALSE;
 		}
 
 		// Reassign the width and height
@@ -1334,7 +1368,7 @@ class CI_Image_lib {
 			return FALSE;
 		}
 
-		$vals = @getimagesize($path);
+		$vals = getimagesize($path);
 
 		$types = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
 

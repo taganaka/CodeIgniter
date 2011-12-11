@@ -4,10 +4,22 @@
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Open Software License version 3.0
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is
+ * bundled with this package in the files license.txt / license.rst.  It is
+ * also available through the world wide web at this URL:
+ * http://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to obtain it
+ * through the world wide web, please send an email to
+ * licensing@ellislab.com so we can send you a copy immediately.
+ *
  * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
+ * @author		EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc. (http://ellislab.com/)
+ * @license		http://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  * @link		http://codeigniter.com
  * @since		Version 1.0
  * @filesource
@@ -21,7 +33,7 @@
  * @package		CodeIgniter
  * @subpackage	Libraries
  * @category	Validation
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/libraries/form_validation.html
  */
 class CI_Form_validation {
@@ -937,7 +949,7 @@ class CI_Form_validation {
 
 		return ($str !== $field) ? FALSE : TRUE;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -950,10 +962,13 @@ class CI_Form_validation {
 	 */
 	public function is_unique($str, $field)
 	{
-		list($table, $field)=explode('.', $field);
-		$query = $this->CI->db->limit(1)->get_where($table, array($field => $str));
-		
-		return $query->num_rows() === 0;
+		list($table, $field) = explode('.', $field);
+		if (isset($this->CI->db))
+		{
+			$query = $this->CI->db->limit(1)->get_where($table, array($field => $str));
+			return $query->num_rows() === 0;
+		}
+		return FALSE;
     }
 
 	// --------------------------------------------------------------------
@@ -1079,7 +1094,7 @@ class CI_Form_validation {
 	 *
 	 * @access	public
 	 * @param	string
-	 * @return	string
+	 * @return	bool
 	 */
 	public function valid_ip($ip)
 	{
