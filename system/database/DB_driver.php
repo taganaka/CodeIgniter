@@ -71,6 +71,7 @@ class CI_DB_driver {
 	var $cache_on		= FALSE;
 	var $cachedir		= '';
 	var $cache_autodel	= FALSE;
+	var $cache_ttl		= 0; //TTL in seconds
 	var $CACHE; // The cache class object
 
 	// Private variables
@@ -81,7 +82,7 @@ class CI_DB_driver {
 	var $stmt_id;
 	var $curs_id;
 	var $limit_used;
-
+	
 
 
 	/**
@@ -1095,11 +1096,16 @@ class CI_DB_driver {
 	 * Enable Query Caching
 	 *
 	 * @access	public
+	 * @param   integer TTL in seconds
 	 * @return	void
 	 */
-	function cache_on()
+	function cache_on($ttl = 0)
 	{
 		$this->cache_on = TRUE;
+		if (is_numeric($ttl))
+		{
+			$this->cache_ttl = $ttl;
+		}
 		return TRUE;
 	}
 
@@ -1113,6 +1119,7 @@ class CI_DB_driver {
 	 */
 	function cache_off()
 	{
+		$this->cache_ttl = 0;
 		$this->cache_on = FALSE;
 		return FALSE;
 	}
