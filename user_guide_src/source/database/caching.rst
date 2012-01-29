@@ -42,12 +42,9 @@ type of queries that produce a result. Write-type (INSERT, UPDATE, etc.)
 queries, since they don't generate a result, will not be cached by the
 system.
 
-Cache files DO NOT expire by default. If a TTL is not specified, queries that have been cached will remain
-cached until you delete them. You can specify the TTL time of the cached queries 
-either globally by setting the preference in your application/config/database.php file,
-or manually as described below.
-  
-The caching system permits you clear caches associated with individual pages, or you can delete the entire
+Cache files DO NOT expire. Any queries that have been cached will remain
+cached until you delete them. The caching system permits you clear
+caches associated with individual pages, or you can delete the entire
 collection of cache files. Typically you'll want to use the housekeeping
 functions described below to delete cache files after certain events
 take place, like when you've added new information to your database.
@@ -91,7 +88,7 @@ many times more cache files than you have queries.
 Managing your Cache Files
 =========================
 
-Since cache files do not expire if a TTL setting is not used, you'll need to build deletion routines
+Since cache files do not expire, you'll need to build deletion routines
 into your application. For example, let's say you have a blog that
 allows user commenting. Whenever a new comment is submitted you'll want
 to delete the cache files associated with the controller function that
@@ -128,15 +125,15 @@ Manually enables/disables caching. This can be useful if you want to
 keep certain queries from being cached. Example::
 
 	// Turn caching on
-	$this->db->cache_on(); // No TTL, cache will never expires
+	$this->db->cache_on();
 	$query = $this->db->query("SELECT * FROM mytable");
 	
 	// Turn caching off for this one query
 	$this->db->cache_off();
 	$query = $this->db->query("SELECT * FROM members WHERE member_id = '$current_user'");
 	
-	// Turn caching back on but this time with an expired period
-	$this->db->cache_on(300); //This query will auto expire after 5 minutes 
+	// Turn caching back on
+	$this->db->cache_on();
 	$query = $this->db->query("SELECT * FROM another_table");
 
 $this->db->cache_delete()
