@@ -103,8 +103,32 @@ class CI_DB_Cache {
 		{
 			return FALSE;
 		}
-
-		return unserialize($cachedata);
+		
+		//Getting the expired time back
+		if ( ! preg_match("/(\d+TS--->)/", $cachedata, $match))
+		{
+			return FALSE;
+		}
+		
+		$saved_time = trim(str_replace('TS--->', '', $match[1]));
+		$data		= trim(str_replace($match[0], '', $cachedata));
+		//TTL disabled
+		if ($saved_time == 0)
+		{
+			log_message('debug','TTL for this query is disabled, return it forever');
+			return unserialize($data);
+		}
+		
+		// Has the file expired? If so we'll delete it.
+		if (time() >= $saved_time)
+		{
+			@unlink($filepath);
+			log_message('debug','Cache file for this query has expired. File deleted');
+			return FALSE;
+		}
+		
+		log_message('debug','Return this query from cache');
+		return unserialize($data);
 	}
 
 	// --------------------------------------------------------------------
@@ -135,8 +159,14 @@ class CI_DB_Cache {
 
 			@chmod($dir_path, DIR_WRITE_MODE);
 		}
-
-		if (write_file($dir_path.$filename, serialize($object)) === FALSE)
+		
+		$expire = 0;
+		if ($this->db->cache_ttl > 0)
+		{
+			$expire = time() + $this->db->cache_ttl;
+		}
+		
+		if (write_file($dir_path.$filename, $expire . 'TS--->'. serialize($object)) === FALSE)
 		{
 			return FALSE;
 		}
